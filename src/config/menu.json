@@ -1,0 +1,21 @@
+{
+  "label": "Rapports",
+  "permission": "report.view",
+  "children": [
+    {
+      "label": "Membres",
+      "route": "/reports/members",
+      "permission": "report.members"
+    },
+    {
+      "label": "Collectes",
+      "route": "/reports/collections",
+      "permission": "report.collections"
+    },
+    {
+      "label": "Activités",
+      "route": "/reports/activities",
+      "permission": "report.activities"
+    }
+  ]
+}

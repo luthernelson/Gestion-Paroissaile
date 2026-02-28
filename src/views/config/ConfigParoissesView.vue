@@ -8,7 +8,8 @@ import {
 import BaseInput from '@/components/ui/BaseInput.vue'
 import Datepicker from '@/components/ui/Datepicker.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
-import LocationPicker, { type LocationResult } from '@/components/ui/LocationPicker.vue'
+import LocationPicker from '@/components/ui/LocationPicker.vue'
+import  { type LocationResult } from '@/components/ui/LocationPicker.vue'
 
 interface CulteSchedule {
   id: number

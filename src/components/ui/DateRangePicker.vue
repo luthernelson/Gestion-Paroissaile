@@ -3,8 +3,8 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { ChevronLeft, ChevronRight, CalendarRange, X } from 'lucide-vue-next'
 
 export interface DateRange {
-  start: string | null
-  end: string | null
+  start: string | null | undefined
+  end: string | null | undefined
 }
 
 const props = withDefaults(defineProps<{

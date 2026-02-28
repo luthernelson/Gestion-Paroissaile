@@ -4,7 +4,7 @@ import PageTitle from '@/components/layout/PageTitle.vue'
 import FilterBar from '@/components/ui/FilterBar.vue'
 import DateRangePicker from '@/components/ui/DateRangePicker.vue'
 import BaseTable from '@/components/ui/BaseTable.vue'
-import StatCard from '@/components/ui/StartCard.vue'
+import BaseCard from '@/components/ui/BaseCard.vue'
 
 const startDate = ref('')
 const endDate = ref('')
@@ -40,10 +40,10 @@ const generate = () => {
   </FilterBar>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-    <StatCard label="Total collecté" :value="total + ' FCFA'" />
+    <BaseCard label="Total collecté" :value="total + ' FCFA'" />
   </div>
 
   <div class="mt-6">
-    <BaseTable :columns="columns" :rows="rows" />
+    <BaseTable :columns="columns" :data="rows" />
   </div>
 </template>

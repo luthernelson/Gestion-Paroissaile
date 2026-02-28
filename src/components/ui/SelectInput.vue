@@ -2,15 +2,15 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { X, ChevronDown, Check, Search } from 'lucide-vue-next'
 
-export interface AutoCompleteOption {
+export interface Option {
   value: string | number
   label: string
   [key: string]: any
 }
 
 const props = withDefaults(defineProps<{
-  modelValue?: AutoCompleteOption[]
-  options: AutoCompleteOption[]
+  modelValue?: Option[]
+  options: Option[]
   label?: string
   placeholder?: string
   searchPlaceholder?: string
@@ -32,7 +32,7 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: AutoCompleteOption[]): void
+  (e: 'update:modelValue', value: Option[]): void 
 }>()
 
 const open = ref(false)
@@ -45,10 +45,10 @@ const filtered = computed(() => {
   return props.options.filter(o => o.label.toLowerCase().includes(q))
 })
 
-const isSelected = (opt: AutoCompleteOption) =>
+const isSelected = (opt: Option) =>
   (props.modelValue ?? []).some(v => v.value === opt.value)
 
-function toggle(opt: AutoCompleteOption) {
+function toggle(opt: Option) {
   if (props.disabled) return
   const current = [...(props.modelValue ?? [])]
   const idx = current.findIndex(v => v.value === opt.value)
@@ -56,13 +56,18 @@ function toggle(opt: AutoCompleteOption) {
     current.splice(idx, 1)
   } else {
     if (props.maxSelected && current.length >= props.maxSelected) return
+    if (!props.multiple) {
+      
+      emit('update:modelValue', [opt])
+      open.value = false
+      return
+    }
     current.push(opt)
   }
   emit('update:modelValue', current)
-  if (!props.multiple) open.value = false
 }
 
-function remove(opt: AutoCompleteOption) {
+function remove(opt: Option) {
   emit('update:modelValue', (props.modelValue ?? []).filter(v => v.value !== opt.value))
 }
 

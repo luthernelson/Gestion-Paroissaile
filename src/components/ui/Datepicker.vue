@@ -66,7 +66,7 @@ function isDisabled(date: Date) {
 
 function selectDate(date: Date | null) {
   if (!date || isDisabled(date)) return
-  emit('update:modelValue', date.toISOString().split('T')[0])
+  emit('update:modelValue', date.toISOString().split('T')[0] || null)
   open.value = false
 }
 

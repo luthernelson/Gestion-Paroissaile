@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import DashboardCard from '@/components/ui/DashboardCard.vue'
+import BaseCard from '@/components/ui/BaseCard.vue'
 import { Users, Church, Coins, UsersRound, ChevronDown, ChevronRight, RefreshCw } from 'lucide-vue-next'
 
 // Données simulées

@@ -36,6 +36,6 @@ const generate = () => {
   </FilterBar>
 
   <div class="mt-6">
-    <BaseTable :columns="columns" :rows="rows" />
+    <BaseTable :columns="columns" :data="rows" />
   </div>
 </template>

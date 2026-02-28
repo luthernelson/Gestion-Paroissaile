@@ -1,6 +1,7 @@
 export interface MenuItem {
   label: string
   route?: string
-  permission?: string
+  icon?: string
+  permission?: string | null
   children?: MenuItem[]
 }

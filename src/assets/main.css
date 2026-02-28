@@ -874,29 +874,13 @@ span.flatpickr-weekday,
 .void-text {
 }
 
-/* Global app scaling: simulate ~70% browser zoom */
-:root {
-  --app-scale: 0.93; 
-}
+
 
 html, body, #app {
   height: 100%;
 }
 
-/* Prefer native zoom in Chromium-based browsers */
-@supports (zoom: 0.9) {
-  #app {
-    zoom: var(--app-scale);
-  }
-}
 
-/* Fallback for browsers without CSS zoom (e.g., Firefox) */
-@supports not (zoom: 0.9) {
-  #app {
-    transform: scale(var(--app-scale));
-    transform-origin: top left;
-  }
-}
 
 .flatpickr-wrapper {
   @apply w-full;

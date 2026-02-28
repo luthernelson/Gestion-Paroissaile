@@ -3,9 +3,11 @@ import { ref } from 'vue'
 import HeaderBar from './HeaderBar.vue'
 import SidebarMenu from './SidebarMenu.vue'
 import type { MenuItem } from '@/types/menu'
+import menuData from '@/assets/Menu/Menu.json'
+
+const menu = menuData as MenuItem[]
 
 defineProps<{
-  menu: MenuItem[]
   username: string
   permissions: string[]
 }>()
@@ -27,7 +29,7 @@ const closeMobileMenu = () => {
 
 <template>
   <div class="flex flex-col h-screen">
-    <!-- Header - Prend toute la largeur en haut -->
+    <!-- Header -->
     <HeaderBar
       :username="username"
       @logout="emit('logout')"
@@ -36,14 +38,24 @@ const closeMobileMenu = () => {
 
     <!-- Contenu principal avec sidebar et contenu -->
     <div class="flex flex-1 overflow-hidden bg-gray-100">
-      <!-- Overlay pour mobile -->
-      <div
-        v-if="isMobileMenuOpen"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-        @click="closeMobileMenu"
-      ></div>
 
-      <!-- Sidebar - Desktop: toujours visible, Mobile: toggle -->
+      <!-- Overlay mobile -->
+      <Transition
+        enter-active-class="transition-opacity duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition-opacity duration-200 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="isMobileMenuOpen"
+          class="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          @click="closeMobileMenu"
+        />
+      </Transition>
+
+      <!-- Sidebar -->
       <div
         :class="[
           'fixed lg:static inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out lg:transform-none',

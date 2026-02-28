@@ -1,0 +1,170 @@
+[
+  {
+    "label": "Tableau de bord",
+    "route": "/dashboard",
+    "permission": null,
+    "icon": "dashboard"
+  },
+  {
+    "label": "Membres",
+    "permission": "membres.view",
+    "icon": "membres",
+    "children": [
+      {
+        "label": "Liste des membres",
+        "route": "/membres",
+        "permission": "membres.view"
+      },
+      {
+        "label": "Ajouter un membre",
+        "route": "/membres/nouveau",
+        "permission": "membres.create"
+      },
+      {
+        "label": "Catéchèse",
+        "route": "/membres/catechese",
+        "permission": "membres.catechese"
+      },
+      {
+        "label": "Baptêmes",
+        "route": "/membres/baptemes",
+        "permission": "membres.baptemes"
+      }
+    ]
+  },
+  {
+    "label": "Cultes & Activités",
+    "permission": "cultes.view",
+    "icon": "cultes",
+    "children": [
+      {
+        "label": "Calendrier",
+        "route": "/cultes/calendrier",
+        "permission": "cultes.view"
+      },
+      {
+        "label": "Planifier un culte",
+        "route": "/cultes/nouveau",
+        "permission": "cultes.create"
+      },
+      {
+        "label": "Présences",
+        "route": "/cultes/presences",
+        "permission": "cultes.presences"
+      }
+    ]
+  },
+  {
+    "label": "Collectes",
+    "permission": "collectes.view",
+    "icon": "collectes",
+    "children": [
+      {
+        "label": "Vue générale",
+        "route": "/collectes",
+        "permission": "collectes.view"
+      },
+      {
+        "label": "Enregistrer une collecte",
+        "route": "/collectes/nouvelle",
+        "permission": "collectes.create"
+      },
+      {
+        "label": "Dîmes",
+        "route": "/collectes/dimes",
+        "permission": "collectes.dimes"
+      },
+      {
+        "label": "Offrandes spéciales",
+        "route": "/collectes/offrandes",
+        "permission": "collectes.offrandes"
+      }
+    ]
+  },
+  {
+    "label": "Groupes",
+    "permission": "groupes.view",
+    "icon": "groupes",
+    "children": [
+      {
+        "label": "Liste des groupes",
+        "route": "/groupes",
+        "permission": "groupes.view"
+      },
+      {
+        "label": "Créer un groupe",
+        "route": "/groupes/nouveau",
+        "permission": "groupes.create"
+      },
+      {
+        "label": "Cellules",
+        "route": "/groupes/cellules",
+        "permission": "groupes.cellules"
+      },
+      {
+        "label": "Ministères",
+        "route": "/groupes/ministeres",
+        "permission": "groupes.ministeres"
+      }
+    ]
+  },
+  {
+    "label": "Rapports",
+    "permission": "rapports.view",
+    "icon": "rapports",
+    "children": [
+      {
+        "label": "Rapport mensuel",
+        "route": "/rapports/mensuel",
+        "permission": "rapports.view"
+      },
+      {
+        "label": "Rapport annuel",
+        "route": "/rapports/annuel",
+        "permission": "rapports.view"
+      },
+      {
+        "label": "Statistiques membres",
+        "route": "/rapports/membres",
+        "permission": "rapports.membres"
+      },
+      {
+        "label": "Statistiques financières",
+        "route": "/rapports/finances",
+        "permission": "rapports.finances"
+      },
+      {
+        "label": "Exporter les données",
+        "route": "/rapports/export",
+        "permission": "rapports.export"
+      }
+    ]
+  },
+  {
+    "label": "Configuration",
+    "permission": "config.view",
+    "icon": "configuration",
+    "children": [
+      {
+        "label": "Paramètres généraux",
+        "route": "/config/general",
+        "permission": "config.general"
+      },
+      {
+        "label": "Utilisateurs & rôles",
+        "route": "/config/utilisateurs",
+        "permission": "config.utilisateurs"
+      },
+      {
+        "label": "Permissions",
+        "route": "/config/permissions",
+        "permission": "config.permissions"
+      },
+      {
+        "label": "Paroisses",
+        "route": "/config/paroisses",
+        "permission": "config.paroisses"
+      }
+    ]
+  }
+]

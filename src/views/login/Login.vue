@@ -28,7 +28,7 @@
       </div>
 
       <!-- Ticker défilant -->
-      <div class="relative z-10 w-full rounded-full py-3 overflow-hidden" style="background: rgba(0,0,0,0.2)">
+  <!--     <div class="relative z-10 w-full rounded-full py-3 overflow-hidden" style="background: rgba(0,0,0,0.2)">
         <div class="flex gap-12 w-max animate-ticker">
           <template v-for="n in 2" :key="n">
             <div v-for="item in values" :key="item.label + n"
@@ -38,7 +38,7 @@
             </div>
           </template>
         </div>
-      </div>
+      </div> -->
 
       <!-- Cards valeurs -->
       <div class="relative z-10 grid grid-cols-2 gap-3 w-full max-w-[300px]">

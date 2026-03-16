@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { Pencil, ShieldOff, ShieldCheck, ArrowLeft } from 'lucide-vue-next'
+import { Pencil, ShieldOff, ShieldCheck, ArrowLeft, Trash2 } from 'lucide-vue-next'
+import ConfirmModal from '@/components/ui/confirmModal.vue'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { useToast } from '@/stores/toast'
@@ -11,8 +12,29 @@ const route  = useRoute()
 const toast  = useToast()
 
 const isLoading = ref(false)
-const user = ref<any>(null)
-const userId = computed(() => route.params.id as string)
+const user    = ref<any>(null)
+const userId  = computed(() => route.params.id as string)
+
+// ─── Modal confirmation ──────────────────────────────────────────
+const confirmModal = ref({
+  show:         false,
+  variant:      'warning' as 'warning' | 'danger' | 'success' | 'info',
+  title:        '',
+  message:      '',
+  confirmLabel: 'Confirmer',
+  loading:      false,
+  onConfirm:    async () => {},
+})
+
+async function handleConfirm() {
+  confirmModal.value.loading = true
+  try {
+    await confirmModal.value.onConfirm()
+    confirmModal.value.show = false
+  } finally {
+    confirmModal.value.loading = false
+  }
+}
 
 const ROLE_STYLES: Record<string, { badge: string; bg: string; color: string }> = {
   SUPER_ADMIN: { badge: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300', bg: 'bg-purple-50 dark:bg-purple-900/20', color: 'text-purple-700 dark:text-purple-300' },
@@ -61,16 +83,49 @@ const ACTIVITY_COLORS: Record<string, string> = {
   login: 'bg-green-500', edit: 'bg-blue-500', create: 'bg-teal-500', delete: 'bg-red-500', default: 'bg-gray-400',
 }
 
-async function toggleStatus() {
+function toggleStatus() {
   if (!user.value) return
-  const next = user.value.status === 'ACTIF' ? 'SUSPENDU' : 'ACTIF'
-  // TODO: appel API
-  user.value.status = next
-  toast(
-    next === 'SUSPENDU' ? 'warning' : 'success',
-    next === 'SUSPENDU' ? `${user.value.prenom} ${user.value.nom} a été suspendu.` : `${user.value.prenom} ${user.value.nom} est à nouveau actif.`,
-    next === 'SUSPENDU' ? 'Compte suspendu' : 'Compte réactivé'
-  )
+  const isSuspending = user.value.status === 'ACTIF'
+  confirmModal.value = {
+    show:    true,
+    loading: false,
+    variant:      isSuspending ? 'warning' : 'success',
+    title:        isSuspending
+      ? `Suspendre ${user.value.prenom} ${user.value.nom} ?`
+      : `Réactiver ${user.value.prenom} ${user.value.nom} ?`,
+    message:      isSuspending
+      ? 'Cet utilisateur ne pourra plus se connecter jusqu\'à réactivation.'
+      : 'L\'utilisateur pourra à nouveau se connecter à l\'application.',
+    confirmLabel: isSuspending ? 'Suspendre' : 'Réactiver',
+    onConfirm:    async () => {
+      // TODO: await usersApi.toggleStatus(user.value.id)
+      user.value.status = isSuspending ? 'SUSPENDU' : 'ACTIF'
+      toast(
+        isSuspending ? 'warning' : 'success',
+        isSuspending
+          ? `${user.value.prenom} ${user.value.nom} a été suspendu.`
+          : `${user.value.prenom} ${user.value.nom} est à nouveau actif.`,
+        isSuspending ? 'Compte suspendu' : 'Compte réactivé'
+      )
+    },
+  }
+}
+
+function askDelete() {
+  if (!user.value) return
+  confirmModal.value = {
+    show:         true,
+    loading:      false,
+    variant:      'danger',
+    title:        `Supprimer ${user.value.prenom} ${user.value.nom} ?`,
+    message:      'Cette action est irréversible. Le compte sera définitivement supprimé.',
+    confirmLabel: 'Supprimer définitivement',
+    onConfirm:    async () => {
+      // TODO: await usersApi.delete(user.value.id)
+      toast('success', `${user.value.prenom} ${user.value.nom} a été supprimé.`, 'Utilisateur supprimé')
+      router.push({ name: 'ConfigNewUtilisateurs' })
+    },
+  }
 }
 
 async function fetchUser() {
@@ -139,6 +194,13 @@ onMounted(fetchUser)
           <ShieldOff v-if="user.status === 'ACTIF'" class="w-4 h-4" />
           <ShieldCheck v-else class="w-4 h-4" />
           {{ user.status === 'ACTIF' ? 'Suspendre' : 'Réactiver' }}
+        </button>
+        <button
+          class="flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-semibold border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
+          @click="askDelete"
+        >
+          <Trash2 class="w-4 h-4" />
+          Supprimer
         </button>
         <BaseButton
           variant="primary"
@@ -279,6 +341,18 @@ onMounted(fetchUser)
 
     </template>
   </div>
+
+    <!-- Modal confirmation -->
+    <ConfirmModal
+      v-model="confirmModal.show"
+      :variant="confirmModal.variant"
+      :title="confirmModal.title"
+      :message="confirmModal.message"
+      :confirm-label="confirmModal.confirmLabel"
+      :confirm-loading="confirmModal.loading"
+      @confirm="handleConfirm"
+    />
+
 </template>
 
 <style scoped></style>

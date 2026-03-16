@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Plus, Filter } from 'lucide-vue-next'
+import { Plus, Filter, ShieldOff, ShieldCheck, Trash2 } from 'lucide-vue-next'
+import ConfirmModal from '@/components/ui/confirmModal.vue'
 
 import BaseTable from '@/components/ui/BaseTable.vue'
 import SearchBar from '@/components/ui/SearchBar.vue'
@@ -15,6 +16,45 @@ import { useToast } from '@/stores/toast'
 
 const router = useRouter()
 const toast  = useToast()
+
+// ─── Modal confirmation ──────────────────────────────────────────
+const confirmModal = ref<{
+  show:    boolean
+  variant: 'danger' | 'warning'
+  title:   string
+  message: string
+  confirmLabel: string
+  loading: boolean
+  onConfirm: () => Promise<void>
+}>({
+  show:         false,
+  variant:      'warning',
+  title:        '',
+  message:      '',
+  confirmLabel: 'Confirmer',
+  loading:      false,
+  onConfirm:    async () => {},
+})
+
+function openConfirm(opts: {
+  variant:      'danger' | 'warning'
+  title:        string
+  message:      string
+  confirmLabel: string
+  onConfirm:    () => Promise<void>
+}) {
+  confirmModal.value = { ...confirmModal.value, show: true, loading: false, ...opts }
+}
+
+async function handleConfirm() {
+  confirmModal.value.loading = true
+  try {
+    await confirmModal.value.onConfirm()
+    confirmModal.value.show = false
+  } finally {
+    confirmModal.value.loading = false
+  }
+}
 
 const searchQuery  = ref('')
 const filterRole   = ref('')
@@ -136,6 +176,7 @@ async function fetchUsers() {
   }
 }
 
+// Actions fixes (view + edit) passées au BaseTable
 const actions = [
   {
     icon: 'view',
@@ -147,17 +188,52 @@ const actions = [
     label: 'Modifier',
     action: (item: any) => router.push({ name: 'ConfigEditUsers', params: { id: item.id } }),
   },
-  {
-    icon: 'delete',
-    label: 'Suspendre',
-    variant: 'danger' as const,
-    condition: (item: any) => item.status === 'ACTIF',
-    action: (item: any) => {
-      // TODO: appel API suspend
-      toast('warning', `${item.prenom} ${item.nom} a été suspendu.`, 'Utilisateur suspendu')
-    },
-  },
 ]
+
+// Suspendre un utilisateur actif
+function askSuspend(item: any) {
+  openConfirm({
+    variant:      'warning',
+    title:        `Suspendre ${item.prenom} ${item.nom} ?`,
+    message:      'Cet utilisateur ne pourra plus se connecter jusqu\'à réactivation.',
+    confirmLabel: 'Suspendre',
+    onConfirm:    async () => {
+      // TODO: await usersApi.suspend(item.id)
+      item.status = 'SUSPENDU'
+      toast('warning', `${item.prenom} ${item.nom} a été suspendu.`, 'Compte suspendu')
+    },
+  })
+}
+
+// Réactiver un utilisateur suspendu
+function askActivate(item: any) {
+  openConfirm({
+    variant:      'success' as any,
+    title:        `Réactiver ${item.prenom} ${item.nom} ?`,
+    message:      'L\'utilisateur pourra à nouveau se connecter à l\'application.',
+    confirmLabel: 'Réactiver',
+    onConfirm:    async () => {
+      // TODO: await usersApi.activate(item.id)
+      item.status = 'ACTIF'
+      toast('success', `${item.prenom} ${item.nom} est à nouveau actif.`, 'Compte réactivé')
+    },
+  })
+}
+
+// Supprimer définitivement
+function askDelete(item: any) {
+  openConfirm({
+    variant:      'danger',
+    title:        `Supprimer ${item.prenom} ${item.nom} ?`,
+    message:      'Cette action est irréversible. Le compte sera définitivement supprimé.',
+    confirmLabel: 'Supprimer définitivement',
+    onConfirm:    async () => {
+      // TODO: await usersApi.delete(item.id)
+      users.value = users.value.filter((u: any) => u.id !== item.id)
+      toast('success', `${item.prenom} ${item.nom} a été supprimé.`, 'Utilisateur supprimé')
+    },
+  })
+}
 
 let searchTimeout: ReturnType<typeof setTimeout>
 watch(searchQuery, () => {
@@ -297,9 +373,53 @@ onMounted(fetchUsers)
           {{ item.createdAt ? new Date(item.createdAt).toLocaleDateString('fr-FR') : '—' }}
         </span>
       </template>
+      <!-- Slot actions custom pour les boutons conditionnels -->
+      <template #actions="{ item }">
+        <!-- Suspendre (si actif) -->
+        <button
+          v-if="item.status === 'ACTIF'"
+          class="p-1.5 rounded-lg text-gray-400 dark:text-slate-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
+          title="Suspendre"
+          @click.stop="askSuspend(item)"
+        >
+          <ShieldOff class="w-4 h-4" />
+        </button>
+
+        <!-- Réactiver (si suspendu) -->
+        <button
+          v-else-if="item.status === 'SUSPENDU'"
+          class="p-1.5 rounded-lg text-gray-400 dark:text-slate-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
+          title="Réactiver"
+          @click.stop="askActivate(item)"
+        >
+          <ShieldCheck class="w-4 h-4" />
+        </button>
+
+        <!-- Supprimer (toujours visible) -->
+        <button
+          class="p-1.5 rounded-lg text-gray-400 dark:text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+          title="Supprimer définitivement"
+          @click.stop="askDelete(item)"
+        >
+          <Trash2 class="w-4 h-4" />
+        </button>
+      </template>
+
     </BaseTable>
 
   </div>
+
+    <!-- Modal confirmation -->
+    <ConfirmModal
+      v-model="confirmModal.show"
+      :variant="confirmModal.variant"
+      :title="confirmModal.title"
+      :message="confirmModal.message"
+      :confirm-label="confirmModal.confirmLabel"
+      :confirm-loading="confirmModal.loading"
+      @confirm="handleConfirm"
+    />
+
 </template>
 
 <style scoped></style>

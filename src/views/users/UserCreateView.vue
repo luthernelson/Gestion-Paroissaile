@@ -133,6 +133,20 @@ function resetPerms() {
   activePerms.value = [...(DEFAULT_PERMISSIONS[selectedRole.value] ?? [])]
 }
 
+// ─── Pagination permissions ───────────────────────────────────────
+const PERMS_PER_PAGE = 6
+const permPage = ref(1)
+
+const permTotalPages = computed(() => Math.ceil(ALL_PERMISSIONS.length / PERMS_PER_PAGE))
+const permRangeStart = computed(() => (permPage.value - 1) * PERMS_PER_PAGE + 1)
+const permRangeEnd   = computed(() => Math.min(permPage.value * PERMS_PER_PAGE, ALL_PERMISSIONS.length))
+const pagedPermissions = computed(() =>
+  ALL_PERMISSIONS.slice((permPage.value - 1) * PERMS_PER_PAGE, permPage.value * PERMS_PER_PAGE)
+)
+
+// Reset page quand on change de rôle
+watch(selectedRole, () => { permPage.value = 1 })
+
 async function handleSave() {
   if (!form.prenom || !form.nom || !form.email || !selectedRole.value) {
     toast('warning', 'Veuillez remplir tous les champs obligatoires.', 'Champs manquants')
@@ -202,7 +216,7 @@ onMounted(fetchUser)
     <template v-else>
 
       <!-- Informations personnelles -->
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm">
         <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-700">
           <p class="text-sm font-bold text-gray-900 dark:text-white">Informations personnelles</p>
           <p class="text-xs text-gray-400 mt-0.5">Identité et coordonnées de l'utilisateur</p>
@@ -221,7 +235,7 @@ onMounted(fetchUser)
       </div>
 
       <!-- Rôle -->
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm">
         <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-700">
           <p class="text-sm font-bold text-gray-900 dark:text-white">Rôle <span class="text-red-500">*</span></p>
           <p class="text-xs text-gray-400 mt-0.5">Sélectionnez le rôle de cet utilisateur</p>
@@ -262,7 +276,7 @@ onMounted(fetchUser)
       </Transition>
 
       <!-- Permissions -->
-      <div v-if="selectedRole" class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm overflow-hidden">
+      <div v-if="selectedRole" class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm">
         <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-700 flex items-center justify-between">
           <div>
             <p class="text-sm font-bold text-gray-900 dark:text-white">
@@ -272,15 +286,19 @@ onMounted(fetchUser)
                 {{ isDefaultPerms ? 'par défaut du rôle' : 'modifiées' }}
               </span>
             </p>
-            <p class="text-xs text-gray-400 mt-0.5">Cochez les permissions à accorder à cet utilisateur</p>
+            <p class="text-xs text-gray-400 mt-0.5">
+              {{ activePerms.length }} / {{ ALL_PERMISSIONS.length }} permissions sélectionnées
+            </p>
           </div>
           <button v-if="!isDefaultPerms" type="button" class="text-xs text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200 underline underline-offset-2 transition-colors" @click="resetPerms">
             Réinitialiser
           </button>
         </div>
+
+        <!-- Grille permissions paginée -->
         <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-2">
           <label
-            v-for="perm in ALL_PERMISSIONS" :key="perm.key"
+            v-for="perm in pagedPermissions" :key="perm.key"
             class="flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all duration-100 select-none"
             :class="activePerms.includes(perm.key)
               ? 'border-green-300 bg-green-50 dark:border-green-700 dark:bg-green-900/20'
@@ -293,10 +311,38 @@ onMounted(fetchUser)
             </div>
           </label>
         </div>
+
+        <!-- Pagination permissions -->
+        <div v-if="permTotalPages > 1" class="px-6 pb-5 flex items-center justify-between gap-3 border-t border-gray-100 dark:border-slate-700 pt-4">
+          <p class="text-xs text-gray-400 dark:text-slate-500">
+            Page {{ permPage }} sur {{ permTotalPages }}
+            <span class="ml-1">({{ permRangeStart }}–{{ permRangeEnd }} sur {{ ALL_PERMISSIONS.length }})</span>
+          </p>
+          <div class="flex items-center gap-1">
+            <button
+              class="h-8 px-3 rounded-lg text-xs font-medium border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-500 dark:text-slate-400 hover:bg-green-50 hover:text-green-700 hover:border-green-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              :disabled="permPage === 1"
+              @click="permPage--"
+            >← Préc.</button>
+            <button
+              v-for="p in permTotalPages" :key="p"
+              class="h-8 w-8 rounded-lg text-xs font-medium border transition-colors"
+              :class="p === permPage
+                ? 'bg-green-600 text-white border-green-600'
+                : 'border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-500 dark:text-slate-400 hover:bg-green-50 hover:text-green-700 hover:border-green-300'"
+              @click="permPage = p"
+            >{{ p }}</button>
+            <button
+              class="h-8 px-3 rounded-lg text-xs font-medium border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-500 dark:text-slate-400 hover:bg-green-50 hover:text-green-700 hover:border-green-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              :disabled="permPage === permTotalPages"
+              @click="permPage++"
+            >Suiv. →</button>
+          </div>
+        </div>
       </div>
 
       <!-- Accès & sécurité -->
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm">
         <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-700">
           <p class="text-sm font-bold text-gray-900 dark:text-white">Accès & sécurité</p>
           <p class="text-xs text-gray-400 mt-0.5">{{ isEditMode ? 'Statut du compte et réinitialisation du mot de passe' : 'Statut du compte et mot de passe initial' }}</p>

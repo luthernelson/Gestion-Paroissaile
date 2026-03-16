@@ -176,9 +176,50 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'config/users/:id',
         name: 'ConfigviewUtilisateurs',
-        component: () => import('@/views/users/UserDetailsView.vue'),
+        component: () => import('@/views/users/userDetailsView.vue'),
         meta: { permission:null }
       },
+      {
+        path: 'config/site',
+        name: 'SiteConfigIndex',
+        component: () => import('@/views/config/site/SiteConfigIndex.vue'),
+        meta: { permission: null }
+      },
+     /*  {
+        path: 'config/site/apparence',
+        name: 'SiteConfigApparence',
+        component: () => import('@/views/site/SiteConfigApparence.vue'),
+      },
+      {
+        path: 'config/site/accueil',
+        name: 'SiteConfigAccueil',
+        component: () => import('@/views/site/SiteConfigAccueil.vue'),
+      },
+      {
+        path: 'config/site/evenements',
+        name: 'SiteConfigEvenements',
+        component: () => import('@/views/site/SiteConfigEvenements.vue'),
+      },
+      {
+        path: 'config/site/annonces',
+        name: 'SiteConfigAnnonces',
+        component: () => import('@/views/site/SiteConfigAnnonces.vue'),
+      },
+      {
+        path: 'config/site/medias',
+        name: 'SiteConfigMedias',
+        component: () => import('@/views/site/SiteConfigMedias.vue'),
+      }, 
+      {
+        path: 'config/site/reseaux',
+        name: 'SiteConfigReseaux',
+        component: () => import('@/views/site/SiteConfigReseaux.vue'),
+      },
+      {
+        path: 'config/site/statut',
+        name: 'SiteConfigStatut',
+        component: () => import('@/views/site/SiteConfigStatut.vue'),
+      },*/
       /*{
         path: 'config/permissions',
         name: 'ConfigPermissions',

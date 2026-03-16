@@ -152,7 +152,7 @@
       },
       {
         "label": "Utilisateurs & rôles",
-        "route": "/config/utilisateurs",
+        "route": "/config/users",
         "permission": "config.utilisateurs"
       },
       {

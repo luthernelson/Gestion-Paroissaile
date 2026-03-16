@@ -154,14 +154,32 @@ const routes: RouteRecordRaw[] = [
         name: 'ConfigGeneral',
         component: () => import('@/views/config/ConfigGeneralView.vue'),
         meta: { permission: 'config.general' }
-      },
+      },*/
       {
-        path: 'config/utilisateurs',
+        path: 'config/users',
         name: 'ConfigUtilisateurs',
-        component: () => import('@/views/config/ConfigUtilisateursView.vue'),
-        meta: { permission: 'config.utilisateurs' }
+        component: () => import('@/views/users/UserView.vue'),
+        meta: { permission:null }
       },
       {
+        path: 'config/users/new',
+        name: 'ConfigNewUtilisateurs',
+        component: () => import('@/views/users/UserCreateView.vue'),
+        meta: { permission:null }
+      },
+      {
+        path: 'config/users/:id/edit',
+        name: 'ConfigEditUsers',
+        component: () => import('@/views/users/UserCreateView.vue'),
+        meta: { permission:null }
+      },
+      {
+        path: 'config/users/:id',
+        name: 'ConfigviewUtilisateurs',
+        component: () => import('@/views/users/UserDetailsView.vue'),
+        meta: { permission:null }
+      },
+      /*{
         path: 'config/permissions',
         name: 'ConfigPermissions',
         component: () => import('@/views/config/ConfigPermissionsView.vue'),

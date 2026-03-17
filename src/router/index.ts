@@ -149,12 +149,12 @@ const routes: RouteRecordRaw[] = [
         meta: { permission: 'rapports.export' }
       }, */
       // ── Configuration ──
-     /*  {
+      {
         path: 'config/general',
         name: 'ConfigGeneral',
-        component: () => import('@/views/config/ConfigGeneralView.vue'),
-        meta: { permission: 'config.general' }
-      },*/
+        component: () => import('@/views/config/ConfigParoissesView.vue'),
+        meta: { permission: null }
+      },
       {
         path: 'config/users',
         name: 'ConfigUtilisateurs',
@@ -185,51 +185,45 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/config/site/SiteConfigIndex.vue'),
         meta: { permission: null }
       },
-     /*  {
+       {
         path: 'config/site/apparence',
         name: 'SiteConfigApparence',
-        component: () => import('@/views/site/SiteConfigApparence.vue'),
+        component: () => import('@/views/config/site/SiteConfigApparence.vue'),
       },
       {
         path: 'config/site/accueil',
         name: 'SiteConfigAccueil',
-        component: () => import('@/views/site/SiteConfigAccueil.vue'),
+        component: () => import('@/views/config/site/SiteConfigAcceuil.vue'),
       },
       {
         path: 'config/site/evenements',
         name: 'SiteConfigEvenements',
-        component: () => import('@/views/site/SiteConfigEvenements.vue'),
+        component: () => import('@/views/config/site/SiteConfigEvenement.vue'),
       },
       {
         path: 'config/site/annonces',
         name: 'SiteConfigAnnonces',
-        component: () => import('@/views/site/SiteConfigAnnonces.vue'),
+        component: () => import('@/views/config/site/SiteConfigAnnonces.vue'),
       },
       {
         path: 'config/site/medias',
         name: 'SiteConfigMedias',
-        component: () => import('@/views/site/SiteConfigMedias.vue'),
+        component: () => import('@/views/config/site/SiteConfigMedias.vue'),
       }, 
       {
         path: 'config/site/reseaux',
         name: 'SiteConfigReseaux',
-        component: () => import('@/views/site/SiteConfigReseaux.vue'),
+        component: () => import('@/views/config/site/SiteConfigReseaux.vue'),
       },
       {
         path: 'config/site/statut',
         name: 'SiteConfigStatut',
-        component: () => import('@/views/site/SiteConfigStatut.vue'),
-      },*/
-      /*{
+        component: () => import('@/views/config/site/SiteConfigStatut.vue'),
+      },
+      {
         path: 'config/permissions',
         name: 'ConfigPermissions',
-        component: () => import('@/views/config/ConfigPermissionsView.vue'),
-        meta: { permission: 'config.permissions' }
-      },*/
-      {
-        path: 'config/paroisses',
-        name: 'ConfigParoisses',
-        component: () => import('@/views/config/ConfigParoissesView.vue'),
+        component: () => import('@/views/users/RolesPermission.vue'),
         meta: { permission: null }
       }, 
       // ── Accès refusé ──

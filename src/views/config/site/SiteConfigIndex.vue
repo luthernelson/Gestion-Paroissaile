@@ -39,49 +39,49 @@ const sections = [
     title:       'Apparence',
     description: 'Couleurs, logo, favicon, typographie et identité visuelle du site.',
     icon:        Palette,
-    //to:          { name: 'SiteConfigApparence' },
+    to:          { name: 'SiteConfigApparence' },
   },
   {
     key:         'accueil',
     title:       'Page d\'accueil',
     description: 'Bannière hero, verset du moment, sections visibles et mise en page.',
     icon:        Home,
-    //to:          { name: 'SiteConfigAccueil' },
+    to:          { name: 'SiteConfigAccueil' },
   },
   {
     key:         'evenements',
     title:       'Événements',
     description: 'Choisissez quels événements sont publiés sur le site et le calendrier public.',
     icon:        CalendarDays,
-    //to:          { name: 'SiteConfigEvenements' },
+    to:          { name: 'SiteConfigEvenements' },
   },
   {
     key:         'annonces',
     title:       'Annonces & actualités',
     description: 'Gérez les annonces publiées sur le site et leur statut de publication.',
     icon:        Newspaper,
-    //to:          { name: 'SiteConfigAnnonces' },
+    to:          { name: 'SiteConfigAnnonces' },
   },
   {
     key:         'medias',
     title:       'Médias & prédications',
     description: 'Décidez quelles prédications et ressources sont accessibles publiquement.',
     icon:        MonitorPlay,
-    //to:          { name: 'SiteConfigMedias' },
+    to:          { name: 'SiteConfigMedias' },
   },
   {
     key:         'reseaux',
     title:       'Réseaux sociaux',
     description: 'Liens Facebook, YouTube, Instagram, WhatsApp affichés sur le site.',
     icon:        Share2,
-    //to:          { name: 'SiteConfigReseaux' },
+    to:          { name: 'SiteConfigReseaux' },
   },
   {
     key:         'statut',
     title:       'Statut du site',
     description: 'Mettre le site en ligne ou en maintenance avec un message personnalisé.',
     icon:        Power,
-    //to:          { name: 'SiteConfigStatut' },
+    to:          { name: 'SiteConfigStatut' },
   },
 ]
 </script>
@@ -120,7 +120,7 @@ const sections = [
          :class="stats.siteStatus === 'EN_LIGNE' ? 'text-green-800 dark:text-green-300' : 'text-amber-800 dark:text-amber-300'">
         Site {{ stats.siteStatus === 'EN_LIGNE' ? 'en ligne' : 'en maintenance' }}
       </p>
- <!--      <router-link
+      <router-link
         :to="{ name: 'SiteConfigStatut' }"
         class="ml-auto text-xs font-medium underline underline-offset-2 transition-colors"
         :class="stats.siteStatus === 'EN_LIGNE'
@@ -128,7 +128,7 @@ const sections = [
           : 'text-amber-700 hover:text-amber-900 dark:text-amber-400'"
       >
         Modifier
-      </router-link> -->
+      </router-link>
     </div>
 
     <!-- Résumé rapide -->
@@ -163,6 +163,7 @@ const sections = [
           :title="section.title"
           :description="section.description"
           :icon="section.icon"
+          :to="section.to"
         />
       </div>
     </div>

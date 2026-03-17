@@ -160,11 +160,7 @@
         "route": "/config/permissions",
         "permission": "config.permissions"
       },
-      {
-        "label": "Paroisses",
-        "route": "/config/paroisses",
-        "permission": "config.paroisses"
-      },
+
       {
         "label": "Site web",
         "route": "/config/site",

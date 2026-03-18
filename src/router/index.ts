@@ -129,14 +129,32 @@ const routes: RouteRecordRaw[] = [
         name: 'RapportAnnuel',
         component: () => import('@/views/rapports/RapportAnnuelView.vue'),
         meta: { permission: 'rapports.view' }
+      }, */
+    {
+        path: 'rapports/home',
+        name: 'RapportHome',
+        component: () => import('@/views/reports/ReportsHome.vue'),
+        meta: { permission: null }
       },
       {
         path: 'rapports/membres',
         name: 'RapportMembres',
-        component: () => import('@/views/rapports/RapportMembresView.vue'),
-        meta: { permission: 'rapports.membres' }
+        component: () => import('@/views/reports/MembersReport.vue'),
+        meta: { permission: null }
       },
       {
+        path: 'rapports/activites',
+        name: 'RapportActivites',
+        component: () => import('@/views/reports/ActivitiesReport.vue'),
+        meta: { permission: null }
+      },
+      {
+        path: 'rapports/collectes',
+        name: 'RapportCollectes',
+        component: () => import('@/views/reports/CollectesReport.vue'),
+        meta: { permission: null }
+      },
+      /*  {
         path: 'rapports/finances',
         name: 'RapportFinances',
         component: () => import('@/views/rapports/RapportFinancesView.vue'),

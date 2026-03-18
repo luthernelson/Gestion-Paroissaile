@@ -114,24 +114,24 @@
     "icon": "rapports",
     "children": [
       {
-        "label": "Rapport mensuel",
-        "route": "/rapports/mensuel",
-        "permission": "rapports.view"
+        "label": "Accueil des rapports",
+        "route": "/rapports/home",
+        "permission": null
       },
       {
-        "label": "Rapport annuel",
-        "route": "/rapports/annuel",
-        "permission": "rapports.view"
-      },
-      {
-        "label": "Statistiques membres",
+        "label": "Rapport de Membres",
         "route": "/rapports/membres",
-        "permission": "rapports.membres"
+        "permission": null
       },
       {
-        "label": "Statistiques financières",
-        "route": "/rapports/finances",
-        "permission": "rapports.finances"
+        "label": "Rapport des activités",
+        "route": "/rapports/activites",
+        "permission": null
+      },
+      {
+        "label": "Contributions financières",
+        "route": "/rapports/collectes",
+        "permission": null
       },
       {
         "label": "Exporter les données",
